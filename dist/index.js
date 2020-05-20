@@ -3515,6 +3515,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const branch = core.getInput('branch');
+            core.info(branch);
             const octokit = new github_1.GitHub(core.getInput('github_token'));
             yield octokit.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: 'master', head: branch }));
             yield octokit.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: 'develop', head: branch }));

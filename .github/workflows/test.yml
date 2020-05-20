@@ -3,18 +3,18 @@ on: # rebuild any PRs and main branch changes
   pull_request:
   push:
     branches:
-      - 'releases/*'
+      - 'release-*'
 
 jobs:
-  build: # make sure build/ci work properly
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
     - uses: ./
       with: 
-        github_token: {{ secrets.GITHUB_TOKEN }}
-        branch: ${GITHUB_REF##*/}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ steps.extract_branch.outputs.branch }}
