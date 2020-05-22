@@ -14,8 +14,12 @@ jobs:
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       id: extract_branch
+    - name: Extract tag name
+      shell: bash
+      run: echo "##[set-output name=tag;]$(echo ${steps.extract_branch.outputs.branch#release-*})"
+      id: extract_tag
     - uses: ./
       with: 
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ steps.extract_branch.outputs.branch }}
-        tag: "0.0.2"
+        tag: ${{ steps.extract_tag.outputs.tag }}
