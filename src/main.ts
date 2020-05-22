@@ -17,14 +17,6 @@ async function run(): Promise<void> {
 
     core.info(response.data.sha)
 
-    /*await octokit.git.createTag({
-      ...context.repo,
-      tag,
-      message: '',
-      object: response.data.sha,
-      type: 'commit'
-    })*/
-
     await octokit.git.createRef({
       ...context.repo,
       ref: `refs/tags/${tag}`,
