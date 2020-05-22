@@ -16,7 +16,7 @@ jobs:
       id: extract_branch
     - name: Extract tag name
       shell: bash
-      run: echo "##[set-output name=tag;]$(echo ${steps.extract_branch.outputs.branch#release-*})"
+      run: echo "##[set-output name=tag;]$(echo ${{steps.extract_branch.outputs.branch#release-*}})"
       id: extract_tag
     - uses: ./
       with: 
