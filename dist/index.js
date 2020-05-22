@@ -3516,8 +3516,11 @@ function run() {
         try {
             const branch = core.getInput('branch');
             core.info(branch);
+            const tag = core.getInput('tag');
+            core.info(tag);
             const octokit = new github_1.GitHub(core.getInput('github_token'));
-            yield octokit.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: 'master', head: branch }));
+            const response = yield octokit.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: 'master', head: branch }));
+            yield octokit.git.createTag(Object.assign(Object.assign({}, github_1.context.repo), { tag, message: '', object: response.data.sha, type: 'commit' }));
             yield octokit.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: 'develop', head: branch }));
         }
         catch (error) {
