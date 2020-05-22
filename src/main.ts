@@ -5,12 +5,22 @@ async function run(): Promise<void> {
   try {
     const branch: string = core.getInput('branch')
     core.info(branch)
+    const tag: string = core.getInput('tag')
+    core.info(tag)
     const octokit = new GitHub(core.getInput('github_token'))
 
-    await octokit.repos.merge({
+    const response = await octokit.repos.merge({
       ...context.repo,
       base: 'master',
       head: branch
+    })
+
+    core.info(response.data.sha)
+
+    await octokit.git.createRef({
+      ...context.repo,
+      ref: `refs/tags/${tag}`,
+      sha: response.data.sha
     })
 
     await octokit.repos.merge({
