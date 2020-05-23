@@ -1,12 +1,12 @@
 name: "build-test"
-on: # rebuild any PRs and main branch changes
+on: # merge release branch when pushed
   pull_request:
   push:
     branches:
       - 'release-*'
 
 jobs:
-  test: # make sure the action works on a clean machine without building
+  test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
