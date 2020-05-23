@@ -3513,26 +3513,33 @@ const core = __importStar(__webpack_require__(470));
 const github_1 = __webpack_require__(469);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        const branch = core.getInput('branch');
+        core.info(`branch name=${branch}`);
+        const octokit = new github_1.GitHub(core.getInput('github_token'));
+        let newMasterSha = '';
         try {
-            const branch = core.getInput('branch');
-            core.info(branch);
-            const tag = core.getInput('tag');
-            core.info(tag);
-            const octokit = new github_1.GitHub(core.getInput('github_token'));
             const response = yield octokit.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: 'master', head: branch }));
-            core.info(response.data.sha);
-            /*await octokit.git.createTag({
-              ...context.repo,
-              tag,
-              message: '',
-              object: response.data.sha,
-              type: 'commit'
-            })*/
-            yield octokit.git.createRef(Object.assign(Object.assign({}, github_1.context.repo), { ref: `refs/tags/${tag}`, sha: response.data.sha }));
+            newMasterSha = response.data.sha;
+            core.info(`sha = ${newMasterSha}`);
+        }
+        catch (error) {
+            core.setFailed(`master merge failed::${error.message}`);
+        }
+        const tag = core.getInput('tag');
+        if (tag) {
+            core.info(`tag name=${tag}`);
+            try {
+                yield octokit.git.createRef(Object.assign(Object.assign({}, github_1.context.repo), { ref: `refs/tags/${tag}`, sha: newMasterSha }));
+            }
+            catch (error) {
+                core.setFailed(`add tag failed::${error.message}`);
+            }
+        }
+        try {
             yield octokit.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: 'develop', head: branch }));
         }
         catch (error) {
-            core.setFailed(error.message);
+            core.setFailed(`develop merge failed::${error.message}`);
         }
     });
 }
