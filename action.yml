@@ -4,8 +4,10 @@ author: 'Yasuharu Yanamura'
 inputs:
   github_token:
     description: 'GitHub token'
+    required: true
   branch:
     description: 'release or hotfix branch'
+    required: true
   tag:
     description: 'tag name'
 runs:
