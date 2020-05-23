@@ -5,6 +5,7 @@ This action merge specified branch to develop and master.
 # Usage
 
 ```yaml
+    - uses: actions/checkout@v1
     - name: Extract branch name
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
