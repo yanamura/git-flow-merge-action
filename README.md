@@ -16,7 +16,7 @@ This action merge specified branch to develop and master.
         branch=${{ steps.extract_branch.outputs.branch }}
         echo "##[set-output name=tag;]$(echo ${branch#release/})"
       id: extract_tag
-    - uses: ./
+    - uses: yanamura/git-flow-merge-action@v1
       with: 
         ### GITHUB_TOKEN.(required)
         github_token: ${{ secrets.GITHUB_TOKEN }}
