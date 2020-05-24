@@ -14,7 +14,7 @@ This action merge specified branch to develop and master.
       shell: bash
       run: |
         branch=${{ steps.extract_branch.outputs.branch }}
-        echo "##[set-output name=tag;]$(echo ${branch#release-})"
+        echo "##[set-output name=tag;]$(echo ${branch#release/})"
       id: extract_tag
     - uses: ./
       with: 

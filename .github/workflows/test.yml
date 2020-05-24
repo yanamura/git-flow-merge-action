@@ -1,9 +1,9 @@
-name: "build-test"
+name: "merge-test"
 on: # merge release branch when pushed
   pull_request:
   push:
     branches:
-      - 'release-*'
+      - 'release/*'
 
 jobs:
   test:
@@ -18,7 +18,7 @@ jobs:
       shell: bash
       run: |
         branch=${{ steps.extract_branch.outputs.branch }}
-        echo "##[set-output name=tag;]$(echo ${branch#release-})"
+        echo "##[set-output name=tag;]$(echo ${branch#release/})"
       id: extract_tag
     - uses: ./
       with: 
