@@ -27,6 +27,6 @@ This action merge specified branch to develop and master.
 
         ### tag name which tagged to master.(optional)
         ### ex. v1.1.0
-        tag: ${{ steps.extract_tag.outputs.tag }}
+        tag: v${{ steps.extract_tag.outputs.tag }}
 ```
 
