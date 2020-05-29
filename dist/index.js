@@ -3514,6 +3514,7 @@ const github_1 = __webpack_require__(469);
 const octokit = new github_1.GitHub(core.getInput('github_token'));
 function merge(branch, to) {
     return __awaiter(this, void 0, void 0, function* () {
+        core.info(`merge branch:${branch} to: ${to}`);
         const response = yield octokit.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: to, head: branch }));
         const newMasterSha = response.data.sha;
         core.info(`sha = ${newMasterSha}`);
@@ -3547,7 +3548,7 @@ function run() {
             }
         }
         try {
-            yield merge(branch, core.getInput('develop-branch'));
+            yield merge(branch, core.getInput('develop_branch'));
         }
         catch (error) {
             core.setFailed(`develop merge failed::${error.message}`);
