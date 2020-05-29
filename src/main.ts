@@ -4,6 +4,7 @@ import {context, GitHub} from '@actions/github'
 const octokit = new GitHub(core.getInput('github_token'))
 
 async function merge(branch: string, to: string): Promise<string> {
+  core.info(`merge branch:${branch} to: ${to}`)
   const response = await octokit.repos.merge({
     ...context.repo,
     base: to,
@@ -44,7 +45,7 @@ async function run(): Promise<void> {
   }
 
   try {
-    await merge(branch, core.getInput('develop-branch'))
+    await merge(branch, core.getInput('develop_branch'))
   } catch (error) {
     core.setFailed(`develop merge failed::${error.message}`)
   }
