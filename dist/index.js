@@ -3511,16 +3511,27 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(470));
 const github_1 = __webpack_require__(469);
+const octokit = new github_1.GitHub(core.getInput('github_token'));
+function merge(branch, to) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const response = yield octokit.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: to, head: branch }));
+        const newMasterSha = response.data.sha;
+        core.info(`sha = ${newMasterSha}`);
+        return newMasterSha;
+    });
+}
+function addTag(tag, sha) {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield octokit.git.createRef(Object.assign(Object.assign({}, github_1.context.repo), { ref: `refs/tags/${tag}`, sha }));
+    });
+}
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         const branch = core.getInput('branch');
         core.info(`branch name=${branch}`);
-        const octokit = new github_1.GitHub(core.getInput('github_token'));
         let newMasterSha = '';
         try {
-            const response = yield octokit.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: 'master', head: branch }));
-            newMasterSha = response.data.sha;
-            core.info(`sha = ${newMasterSha}`);
+            newMasterSha = yield merge(branch, 'master');
         }
         catch (error) {
             core.setFailed(`master merge failed::${error.message}`);
@@ -3529,14 +3540,14 @@ function run() {
         if (tag) {
             core.info(`tag name=${tag}`);
             try {
-                yield octokit.git.createRef(Object.assign(Object.assign({}, github_1.context.repo), { ref: `refs/tags/${tag}`, sha: newMasterSha }));
+                yield addTag(tag, newMasterSha);
             }
             catch (error) {
                 core.setFailed(`add tag failed::${error.message}`);
             }
         }
         try {
-            yield octokit.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: 'develop', head: branch }));
+            yield merge(branch, core.getInput('develop-branch'));
         }
         catch (error) {
             core.setFailed(`develop merge failed::${error.message}`);

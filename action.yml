@@ -8,6 +8,9 @@ inputs:
   branch:
     description: 'release or hotfix branch'
     required: true
+  develop_branch:
+    description: 'develop branch name'
+    default: 'develop'
   tag:
     description: 'tag name'
 runs:
