@@ -44,7 +44,7 @@ async function run(): Promise<void> {
   }
 
   try {
-    await merge(branch, 'develop')
+    await merge(branch, core.getInput('develop-branch'))
   } catch (error) {
     core.setFailed(`develop merge failed::${error.message}`)
   }

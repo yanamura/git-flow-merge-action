@@ -25,6 +25,9 @@ This action merge specified branch to develop and master.
         ### ex. release/1.1.0, hotfix_branch
         branch: ${{ steps.extract_branch.outputs.branch }}
 
+        ### develop branch name. default: develop (optional).
+        develop_branch: 'dev'
+
         ### tag name which tagged to master.(optional)
         ### ex. v1.1.0
         tag: ${{ steps.extract_tag.outputs.tag }}

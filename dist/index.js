@@ -3547,7 +3547,7 @@ function run() {
             }
         }
         try {
-            yield merge(branch, 'develop');
+            yield merge(branch, core.getInput('develop-branch'));
         }
         catch (error) {
             core.setFailed(`develop merge failed::${error.message}`);
