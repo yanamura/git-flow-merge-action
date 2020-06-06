@@ -2,9 +2,7 @@
 
 This action merge specified branch to `develop` and `master` branch, and add tag.
 
-If you're using `release branch` or `hotfix branch` of [gitflow-workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) on your project.
-
-This action will help you when release or hotfix branch is ready to ship.
+If you're using `release branch` or `hotfix branch` of [gitflow-workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) on your project, this action will help you when release or hotfix branch is ready to ship.
 
 ## Usage
 
@@ -74,10 +72,7 @@ ${GITHUB_REF#refs/heads/}
 
 ```yaml
 on:
-  push:
-    branches:
-      - release/*
-    types: [created]
+  create
 jobs:
   automerge:
     runs-on: ubuntu-latest
