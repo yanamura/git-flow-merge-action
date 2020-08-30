@@ -28,10 +28,12 @@ async function run(): Promise<void> {
   core.info(`branch name=${branch}`)
 
   let newMasterSha = ''
+  const mainBranch: string = core.getInput('main_branch')
+  core.info(`main branch name=${mainBranch}`)
   try {
-    newMasterSha = await merge(branch, 'master')
+    newMasterSha = await merge(branch, mainBranch)
   } catch (error) {
-    core.setFailed(`master merge failed::${error.message}`)
+    core.setFailed(`${mainBranch} merge failed::${error.message}`)
   }
 
   const tag: string = core.getInput('tag')

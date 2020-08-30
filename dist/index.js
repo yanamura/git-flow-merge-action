@@ -3531,11 +3531,13 @@ function run() {
         const branch = core.getInput('branch');
         core.info(`branch name=${branch}`);
         let newMasterSha = '';
+        const mainBranch = core.getInput('main_branch');
+        core.info(`main branch name=${mainBranch}`);
         try {
-            newMasterSha = yield merge(branch, 'master');
+            newMasterSha = yield merge(branch, mainBranch);
         }
         catch (error) {
-            core.setFailed(`master merge failed::${error.message}`);
+            core.setFailed(`${mainBranch} merge failed::${error.message}`);
         }
         const tag = core.getInput('tag');
         if (tag) {

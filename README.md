@@ -30,6 +30,9 @@ If you're using `release branch` or `hotfix branch` of [gitflow-workflow](https:
         ### develop branch name. default: develop (optional).
         develop_branch: 'dev'
 
+        ### main branch name. default: master (optional).
+        main_branch: 'main'
+
         ### tag name which tagged to master.(optional)
         ### ex. v1.1.0
         tag: v${{ steps.extract_tag.outputs.tag }}
