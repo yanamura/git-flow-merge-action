@@ -11,6 +11,9 @@ inputs:
   develop_branch:
     description: 'develop branch name'
     default: 'develop'
+  main_branch:
+    description: 'main branch name'
+    default: 'master'
   tag:
     description: 'tag name'
 runs:
