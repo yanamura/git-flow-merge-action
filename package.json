@@ -32,7 +32,7 @@
     "@typescript-eslint/parser": "^4.16.1",
     "@zeit/ncc": "^0.22.3",
     "eslint": "^7.21.0",
-    "eslint-plugin-github": "^4.1.1",
+    "eslint-plugin-github": "^4.1.2",
     "eslint-plugin-jest": "^24.1.5",
     "js-yaml": "^4.0.0",
     "prettier": "^2.2.1",
