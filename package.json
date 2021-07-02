@@ -28,7 +28,7 @@
     "@actions/github": "^5.0.0"
   },
   "devDependencies": {
-    "@types/node": "^15.12.4",
+    "@types/node": "^15.14.0",
     "@typescript-eslint/parser": "^4.27.0",
     "@zeit/ncc": "^0.22.3",
     "eslint": "^7.29.0",
