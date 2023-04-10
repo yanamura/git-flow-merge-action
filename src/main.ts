@@ -1,11 +1,11 @@
 import * as core from '@actions/core'
-import {context, GitHub} from '@actions/github'
+import {context, getOctokit} from '@actions/github'
 
-const octokit = new GitHub(core.getInput('github_token'))
+const octokit = getOctokit(core.getInput('github_token'))
 
 async function merge(branch: string, to: string): Promise<string> {
   core.info(`merge branch:${branch} to: ${to}`)
-  const response = await octokit.repos.merge({
+  const response = await octokit.rest.repos.merge({
     ...context.repo,
     base: to,
     head: branch
@@ -16,7 +16,7 @@ async function merge(branch: string, to: string): Promise<string> {
 }
 
 async function addTag(tag: string, sha: string): Promise<void> {
-  await octokit.git.createRef({
+  await octokit.rest.git.createRef({
     ...context.repo,
     ref: `refs/tags/${tag}`,
     sha
@@ -33,7 +33,7 @@ async function run(): Promise<void> {
   try {
     newMasterSha = await merge(branch, mainBranch)
   } catch (error) {
-    core.setFailed(`${mainBranch} merge failed::${error.message}`)
+    core.setFailed(`${mainBranch} merge failed::${error}`)
   }
 
   const tag: string = core.getInput('tag')
@@ -42,14 +42,14 @@ async function run(): Promise<void> {
     try {
       await addTag(tag, newMasterSha)
     } catch (error) {
-      core.setFailed(`add tag failed::${error.message}`)
+      core.setFailed(`add tag failed::${error}`)
     }
   }
 
   try {
     await merge(branch, core.getInput('develop_branch'))
   } catch (error) {
-    core.setFailed(`develop merge failed::${error.message}`)
+    core.setFailed(`develop merge failed::${error}`)
   }
 }
 
