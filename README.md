@@ -7,7 +7,7 @@ If you're using `release branch` or `hotfix branch` of [gitflow-workflow](https:
 ## Usage
 
 ```yaml
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Extract branch name
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
@@ -53,7 +53,7 @@ jobs:
     if: github.event.label.name == 'release'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Extract branch name
       uses: mdecoleman/pr-branch-name@1.0.0
       id: extract_branch
@@ -80,7 +80,7 @@ jobs:
   automerge:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - uses: yanamura/git-flow-merge-action@v1
       with: 
         github_token: ${{ secrets.GITHUB_TOKEN }}
