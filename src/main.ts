@@ -5,14 +5,24 @@ const octokit = getOctokit(core.getInput('github_token'))
 
 async function merge(branch: string, to: string): Promise<string> {
   core.info(`merge branch:${branch} to: ${to}`)
-  const response = await octokit.rest.repos.merge({
-    ...context.repo,
-    base: to,
-    head: branch
-  })
-  const newMasterSha = response.data.sha
-  core.info(`sha = ${newMasterSha}`)
-  return newMasterSha
+  if (branch == to) {
+    const response = await octokit.rest.repos.getBranch({
+      ...context.repo,
+      branch: branch
+    })
+    const branchSha = response.data.commit.sha
+    core.info(`sha = ${branchSha}`)
+    return branchSha
+  } else {
+    const response = await octokit.rest.repos.merge({
+      ...context.repo,
+      base: to,
+      head: branch
+    })
+    const newMasterSha = response.data.sha
+    core.info(`sha = ${newMasterSha}`)
+    return newMasterSha
+  }
 }
 
 async function addTag(tag: string, sha: string): Promise<void> {
