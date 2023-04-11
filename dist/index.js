@@ -1138,10 +1138,18 @@ const octokit = (0, github_1.getOctokit)(core.getInput('github_token'));
 function merge(branch, to) {
     return __awaiter(this, void 0, void 0, function* () {
         core.info(`merge branch:${branch} to: ${to}`);
-        const response = yield octokit.rest.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: to, head: branch }));
-        const newMasterSha = response.data.sha;
-        core.info(`sha = ${newMasterSha}`);
-        return newMasterSha;
+        if (branch == to) {
+            const response = yield octokit.rest.repos.getBranch(Object.assign(Object.assign({}, github_1.context.repo), { branch: branch }));
+            const branchSha = response.data.commit.sha;
+            core.info(`sha = ${branchSha}`);
+            return branchSha;
+        }
+        else {
+            const response = yield octokit.rest.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: to, head: branch }));
+            const newMasterSha = response.data.sha;
+            core.info(`sha = ${newMasterSha}`);
+            return newMasterSha;
+        }
     });
 }
 function addTag(tag, sha) {
