@@ -1138,10 +1138,32 @@ const octokit = (0, github_1.getOctokit)(core.getInput('github_token'));
 function merge(branch, to) {
     return __awaiter(this, void 0, void 0, function* () {
         core.info(`merge branch:${branch} to: ${to}`);
-        const response = yield octokit.rest.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: to, head: branch }));
-        const newMasterSha = response.data.sha;
-        core.info(`sha = ${newMasterSha}`);
-        return newMasterSha;
+        // check already merged
+        const branchResponse = yield octokit.rest.repos.getBranch(Object.assign(Object.assign({}, github_1.context.repo), { branch: branch }));
+        const branchSha = branchResponse.data.commit.sha;
+        core.info(`branch_sha = ${branchSha}`);
+        const toResponse = yield octokit.rest.repos.getBranch(Object.assign(Object.assign({}, github_1.context.repo), { branch: to }));
+        const toSha = toResponse.data.commit.sha;
+        core.info(`to_sha = ${toSha}`);
+        const commits = yield octokit.rest.repos.listCommits(Object.assign(Object.assign({}, github_1.context.repo), { sha: toSha }));
+        let isMerged = false;
+        for (let i = 0; i < commits.data.length; i++) {
+            const commit = commits.data[i];
+            if (commit.sha == branchSha) {
+                isMerged = true;
+                break;
+            }
+        }
+        if (isMerged) {
+            core.info(`sha = ${toSha}`);
+            return toSha;
+        }
+        else {
+            const mergeResponse = yield octokit.rest.repos.merge(Object.assign(Object.assign({}, github_1.context.repo), { base: to, head: branch }));
+            const newMasterSha = mergeResponse.data.sha;
+            core.info(`sha = ${newMasterSha}`);
+            return newMasterSha;
+        }
     });
 }
 function addTag(tag, sha) {
